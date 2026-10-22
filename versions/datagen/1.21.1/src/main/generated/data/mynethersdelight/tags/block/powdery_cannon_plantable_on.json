@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:magma_block",
+    "mynethersdelight:powdery_cannon",
+    "mynethersdelight:powdery_chubby_sapling",
+    "#c:gravels",
+    "#c:netherracks",
+    "#minecraft:nylium",
+    "#minecraft:sand",
+    "#minecraft:dirt",
+    "#minecraft:base_stone_nether",
+    "#minecraft:soul_speed_blocks"
+  ]
+}

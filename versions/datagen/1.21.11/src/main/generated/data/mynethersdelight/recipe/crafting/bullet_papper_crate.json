@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper",
+    "mynethersdelight:bullet_pepper"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:bullet_pepper_crate"
+  }
+}

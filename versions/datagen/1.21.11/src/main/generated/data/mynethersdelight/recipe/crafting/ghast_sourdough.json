@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:ghast_dough",
+    "#c:foods/dough",
+    "#c:foods/dough",
+    "#c:foods/dough"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:ghast_sourdough"
+  }
+}

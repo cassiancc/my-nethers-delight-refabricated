@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "experience": 0.15,
+  "ingredient": "mynethersdelight:slices_of_bread",
+  "result": {
+    "id": "mynethersdelight:toasts"
+  }
+}

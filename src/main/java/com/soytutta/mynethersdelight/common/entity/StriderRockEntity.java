@@ -1,0 +1,117 @@
+
+package com.soytutta.mynethersdelight.common.entity;
+
+
+import com.soytutta.mynethersdelight.common.registry.MNDEntityTypes;
+import com.soytutta.mynethersdelight.common.registry.MNDItems;
+import com.soytutta.mynethersdelight.common.utility.MNDEntities;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Strider;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+//? if >=26.1.2 {
+//import net.minecraft.world.item.ItemStackTemplate;
+//?}
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+
+public class StriderRockEntity extends ThrowableItemProjectile {
+    public StriderRockEntity(EntityType<StriderRockEntity> StriderRockEntityType, Level level) {
+        super(StriderRockEntityType, level);
+    }
+
+    //? if >=1.21.11 {
+    /*public StriderRockEntity(Level level, LivingEntity livingEntity) {
+        super(MNDEntityTypes.STRIDER_ROCK, livingEntity, level, new ItemStack(MNDItems.STRIDER_ROCK));
+    }
+
+    public StriderRockEntity(Level level, double d, double e, double f) {
+        super(MNDEntityTypes.STRIDER_ROCK, d, e, f, level, new ItemStack(MNDItems.STRIDER_ROCK));
+    }
+    *///?} else {
+    public StriderRockEntity(Level level, LivingEntity livingEntity) {
+        super(MNDEntityTypes.STRIDER_ROCK, livingEntity, level);
+    }
+
+    public StriderRockEntity(Level level, double d, double e, double f) {
+        super(MNDEntityTypes.STRIDER_ROCK, d, e, f, level);
+    }
+    //?}
+
+    public void handleEntityEvent(byte id) {
+        ItemStack entityStack = new ItemStack(this.getDefaultItem());
+        if (id == 3) {
+            //? if >=26.1.2 {
+            //ParticleOptions iparticledata = new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(entityStack));
+            //?} else {
+            ParticleOptions iparticledata = new ItemParticleOption(ParticleTypes.ITEM, entityStack);
+            //?}
+
+            for(int i = 0; i < 12; ++i) {
+                this.level().addParticle(iparticledata, this.getX(), this.getY(), this.getZ(), ((double)this.random.nextFloat() * 2.0 - 1.0) * 0.10000000149011612, ((double)this.random.nextFloat() * 2.0 - 1.0) * 0.10000000149011612 + 0.10000000149011612, ((double)this.random.nextFloat() * 2.0 - 1.0) * 0.10000000149011612);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onHitEntity(EntityHitResult result) {
+        super.onHitEntity(result);
+        result.getEntity().hurt(result.getEntity().damageSources().thrown(this, this.getOwner()), 1.0F);
+    }
+
+    @Override
+    protected void onHit(HitResult result) {
+        super.onHit(result);
+        if (!this.level().isClientSide) {
+            this.playSound(SoundEvents.STONE_BREAK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            boolean striderSpawned = false;
+            if (this.random.nextInt(16) == 0) {
+                int i = 1;
+                if (this.random.nextInt(64) == 0) {
+                    i = 4;
+                }
+
+                for (int j = 0; j < i; ++j) {
+                    Strider strider = MNDEntities.create(EntityType.STRIDER, this.level());
+                    if (strider != null) {
+                        strider.setAge(-24000);
+                        //? if >=1.21.11 {
+                        //strider.snapTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                        //?} else {
+                        strider.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                        //?}
+                        this.level().addFreshEntity(strider);
+                        striderSpawned = true;
+                    }
+                }
+            }
+
+            if (!striderSpawned) {
+                if (this.random.nextInt(5) == 0) {
+                    int i = 1;
+                    for (int j = 0; j < i; ++j) {
+                        ItemEntity stickItem = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(MNDItems.STRIDER_EGG));
+                        this.level().addFreshEntity(stickItem);
+                    }
+                }
+            }
+
+            this.level().broadcastEntityEvent(this, (byte) 3);
+            this.discard();
+        }
+    }
+
+    @Override
+    protected Item getDefaultItem() {
+        return MNDItems.STRIDER_ROCK;
+    }
+}

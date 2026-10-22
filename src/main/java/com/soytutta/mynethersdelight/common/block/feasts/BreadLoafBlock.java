@@ -1,0 +1,197 @@
+package com.soytutta.mynethersdelight.common.block.feasts;
+
+import com.soytutta.mynethersdelight.common.utility.MNDFoodEffects;
+
+import com.soytutta.mynethersdelight.common.utility.MNDItemResults;
+import com.soytutta.mynethersdelight.common.utility.MNDTools;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+//? if >=1.21.11 {
+//import net.minecraft.world.level.ScheduledTickAccess;
+//?}
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+//? if >=1.21.11 {
+//import net.minecraft.world.level.block.state.properties.EnumProperty;
+//?} else {
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+//?}
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import vectorwing.farmersdelight.common.item.KnifeItem;
+import vectorwing.farmersdelight.common.tag.ModTags;
+import vectorwing.farmersdelight.common.utility.ItemUtils;
+
+import java.util.function.Supplier;
+
+
+@SuppressWarnings("deprecation")
+public class BreadLoafBlock extends Block
+{
+    //? if >=1.21.11 {
+    //public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    //?} else {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    //?}
+    public static final IntegerProperty BITES = IntegerProperty.create("bites", 0, 4);
+
+    protected static final VoxelShape SHAPE_NS  = Block.box(3, 0, 1, 13, 10, 15);
+    protected static final VoxelShape SHAPE_WE = Block.box(1, 0, 3, 15, 10, 13);
+    public final Supplier<Item> breadSlice;
+
+    public BreadLoafBlock(Properties properties, Supplier<Item> breadSlice) {
+        super(properties);
+        this.breadSlice = breadSlice;
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(BITES, 0));
+    }
+
+    public ItemStack getBreadSliceItem() {
+        return new ItemStack(this.breadSlice.get());
+    }
+
+    public int getMaxBites() {
+        return 5;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        Direction direction = state.getValue(FACING);
+        return (direction == Direction.NORTH || direction == Direction.SOUTH) ? SHAPE_NS : SHAPE_WE;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+    }
+
+    @Override
+    //? if >=1.21.11 {
+    //public InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    //?} else {
+    public net.minecraft.world.ItemInteractionResult useItemOn(ItemStack heldStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    //?}
+        if (MNDTools.isKnife(heldStack)) {
+            return cutSlice(level, pos, state, player);
+        }
+
+        return MNDItemResults.PASS;
+    }
+
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (level.isClientSide) {
+            if (consumeBite(level, pos, state, player).consumesAction()) {
+                return InteractionResult.SUCCESS;
+            }
+
+            if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+                return InteractionResult.CONSUME;
+            }
+        }
+
+        return consumeBite(level, pos, state, player);
+    }
+
+    protected InteractionResult consumeBite(Level level, BlockPos pos, BlockState state, Player playerIn) {
+        if (!playerIn.canEat(false)) {
+            return InteractionResult.PASS;
+        } else {
+			ItemStack sliceStack = this.getBreadSliceItem();
+			FoodProperties sliceFood = sliceStack.get(DataComponents.FOOD);
+            if (sliceFood != null) {
+                playerIn.getFoodData().eat(sliceFood);
+                MNDFoodEffects.apply(level, playerIn, sliceStack);
+            }
+
+            int bites = state.getValue(BITES);
+            if (bites < getMaxBites() - 1) {
+                level.setBlock(pos, state.setValue(BITES, bites + 1), 3);
+            } else {
+                level.removeBlock(pos, false);
+            }
+            level.playSound(null, pos, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 0.8F);
+            return InteractionResult.SUCCESS;
+        }
+    }
+
+    //? if >=1.21.11 {
+    //protected InteractionResult cutSlice(Level level, BlockPos pos, BlockState state, Player player) {
+    //?} else {
+    protected net.minecraft.world.ItemInteractionResult cutSlice(Level level, BlockPos pos, BlockState state, Player player) {
+    //?}
+        int bites = state.getValue(BITES);
+        if (bites < getMaxBites() - 1) {
+            level.setBlock(pos, state.setValue(BITES, bites + 1), 3);
+        } else {
+            level.removeBlock(pos, false);
+        }
+
+        Direction direction = player.getDirection().getOpposite();
+        ItemUtils.spawnItemEntity(level, this.getBreadSliceItem(), pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5,
+                direction.getStepX() * 0.15, 0.05, direction.getStepZ() * 0.15);
+        level.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.PLAYERS, 0.8F, 0.8F);
+        return MNDItemResults.SUCCESS;
+    }
+
+    @Override
+    //? if >=1.21.11 {
+    /*protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduledTicks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+        return direction == Direction.DOWN && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, scheduledTicks, pos, direction, neighborPos, neighborState, random);
+    }
+    *///?} else {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        return facing == Direction.DOWN && !stateIn.canSurvive(level, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
+    }
+    //?}
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        return level.getBlockState(pos.below()).isSolid();
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, BITES);
+    }
+
+    //? if >=1.21.11 {
+    /*@Override
+    public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos, Direction direction) {
+    *///?} else {
+    @Override
+    public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos) {
+    //?}
+        return getMaxBites() - blockState.getValue(BITES);
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
+        return false;
+    }
+}

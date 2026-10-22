@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": [
+    "minecraft:polished_blackstone_bricks",
+    "minecraft:polished_blackstone",
+    "minecraft:blackstone"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:blackstone_bricks_cabinet"
+  }
+}

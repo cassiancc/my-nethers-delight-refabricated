@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:bullet_pepper",
+    "#c:foods/raw_strider",
+    "minecraft:blaze_rod",
+    "mynethersdelight:bullet_pepper"
+  ],
+  "result": {
+    "id": "mynethersdelight:spicy_skewer"
+  }
+}

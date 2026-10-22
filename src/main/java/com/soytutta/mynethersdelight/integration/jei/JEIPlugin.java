@@ -1,0 +1,98 @@
+
+
+package com.soytutta.mynethersdelight.integration.jei;
+
+import com.google.common.collect.ImmutableList;
+import com.soytutta.mynethersdelight.common.block.BlazierBlock;
+import com.soytutta.mynethersdelight.common.crafting.BlazierTemperatureRecipe;
+import com.soytutta.mynethersdelight.common.registry.MNDItems;
+import com.soytutta.mynethersdelight.common.utility.MNDTextUtils;
+import com.soytutta.mynethersdelight.integration.jei.category.ForgotingRecipeCategory;
+import com.soytutta.mynethersdelight.integration.jei.resource.ForgotingDummy;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.registration.IExtraIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import vectorwing.farmersdelight.common.registry.ModItems;
+import vectorwing.farmersdelight.integration.jei.FDRecipes;
+
+import java.util.List;
+
+@JeiPlugin
+public class JEIPlugin implements IModPlugin {
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("mynethersdelight", "jei_plugin");
+
+    public JEIPlugin() {
+    }
+
+    public void registerCategories(IRecipeCategoryRegistration registry) {
+        registry.addRecipeCategories(new ForgotingRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+    }
+
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(
+                MNDItems.BLAZIER, BlazierSubtypeInterpreter.INSTANCE);
+    }
+
+    public void registerExtraIngredients(IExtraIngredientRegistration registration) {
+        if (true) {
+            registration.addExtraItemStacks(List.of(
+                    BlazierTemperatureRecipeExtension.createBlazierStack(
+                            BlazierBlock.HeatLevel.BAKING, true),
+                    BlazierTemperatureRecipeExtension.createBlazierStack(
+                            BlazierBlock.HeatLevel.CAMPFIRE, true),
+                    BlazierTemperatureRecipeExtension.createBlazierStack(
+                            BlazierBlock.HeatLevel.SMOKING, true),
+                    BlazierTemperatureRecipeExtension.createBlazierStack(
+                            BlazierBlock.HeatLevel.SMOKING, false)
+            ));
+        }
+    }
+
+    public void registerRecipes(IRecipeRegistration registration) {
+        new FDRecipes();
+        registration.addRecipes(MNDRecipeTypes.FORGOTING, ImmutableList.of(new ForgotingDummy()));
+        registration.addIngredientInfo(List.of( new ItemStack(MNDItems.BULLET_PEPPER), new ItemStack(MNDItems.POWDER_CANNON)), VanillaTypes.ITEM_STACK, MNDTextUtils.getTranslation("jei.info.wild_powdery"));
+        registration.addIngredientInfo(List.of( new ItemStack(ModItems.BROWN_MUSHROOM_COLONY.get()), new ItemStack(ModItems.RED_MUSHROOM_COLONY.get())), VanillaTypes.ITEM_STACK, MNDTextUtils.getTranslation("jei.info.mushroom_colony"));
+        registration.addIngredientInfo(List.of( new ItemStack(Items.NETHER_WART), new ItemStack(MNDItems.WARPED_FUNGUS_COLONY), new ItemStack(MNDItems.CRIMSON_FUNGUS_COLONY)), VanillaTypes.ITEM_STACK, MNDTextUtils.getTranslation("jei.info.fungus_colony"));
+        registration.addIngredientInfo(new ItemStack(MNDItems.STRIDER_ROCK), VanillaTypes.ITEM_STACK, MNDTextUtils.getTranslation("jei.info.strider_egg"));
+        registration.addIngredientInfo(new ItemStack(MNDItems.HOGLIN_HIDE), VanillaTypes.ITEM_STACK, MNDTextUtils.getTranslation("jei.info.hoglin_hide"));
+    }
+
+
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(MNDItems.NETHER_STOVE), RecipeTypes.CAMPFIRE_COOKING);
+        registration.addRecipeCatalyst(new ItemStack(MNDItems.SOUL_NETHER_STOVE), RecipeTypes.CAMPFIRE_COOKING);
+        registration.addRecipeCatalyst(new ItemStack(MNDItems.LETIOS_COMPOST), MNDRecipeTypes.FORGOTING);
+        if (true) {
+            registration.addRecipeCatalyst(blazierCatalyst(BlazierBlock.HeatLevel.SMOKING), RecipeTypes.SMOKING);
+            registration.addRecipeCatalyst(blazierCatalyst(BlazierBlock.HeatLevel.BAKING), RecipeTypes.SMELTING);
+            registration.addRecipeCatalyst(blazierCatalyst(BlazierBlock.HeatLevel.CAMPFIRE), RecipeTypes.CAMPFIRE_COOKING);
+            registration.addRecipeCatalyst(blazierCatalyst(BlazierBlock.HeatLevel.SMELTING), RecipeTypes.BLASTING);
+        }
+
+    }
+
+    public void registerVanillaCategoryExtensions(
+            IVanillaCategoryExtensionRegistration registration) {
+        registration.getCraftingCategory().addExtension(
+                BlazierTemperatureRecipe.class, new BlazierTemperatureRecipeExtension());
+    }
+
+    private static ItemStack blazierCatalyst(BlazierBlock.HeatLevel heat) {
+        return BlazierTemperatureRecipeExtension.createBlazierStack(heat, true);
+    }
+
+    public ResourceLocation getPluginUid() {
+        return ID;
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:ghasmati",
+    "#c:drinks/milk",
+    "#c:eggs",
+    [
+      "minecraft:blaze_powder",
+      "mynethersdelight:pepper_powder"
+    ],
+    "minecraft:bowl"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:sizzling_pudding"
+  }
+}

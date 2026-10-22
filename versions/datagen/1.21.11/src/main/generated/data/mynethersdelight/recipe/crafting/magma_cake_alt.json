@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice",
+    "mynethersdelight:magma_cake_slice"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:magma_cake_block"
+  }
+}

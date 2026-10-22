@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "mynethersdelight:powdery_trapdoor",
+    "X": "mynethersdelight:powdery_slab"
+  },
+  "pattern": [
+    "XXX",
+    "T T",
+    "XXX"
+  ],
+  "result": {
+    "id": "mynethersdelight:powdery_cabinet"
+  }
+}

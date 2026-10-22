@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "experience": 0.35,
+  "ingredient": "mynethersdelight:hoglin_sausage",
+  "result": {
+    "id": "mynethersdelight:roasted_sausage"
+  }
+}

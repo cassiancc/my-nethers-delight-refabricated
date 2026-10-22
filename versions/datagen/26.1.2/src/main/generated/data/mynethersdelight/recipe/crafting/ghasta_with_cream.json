@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:magma_cream",
+    "B": "minecraft:bowl",
+    "G": [
+      "mynethersdelight:ghasta",
+      "mynethersdelight:ghasmati"
+    ],
+    "T": "minecraft:ghast_tear"
+  },
+  "pattern": [
+    "GGG",
+    "GT#",
+    "GBG"
+  ],
+  "result": {
+    "id": "mynethersdelight:ghasta_with_cream"
+  }
+}

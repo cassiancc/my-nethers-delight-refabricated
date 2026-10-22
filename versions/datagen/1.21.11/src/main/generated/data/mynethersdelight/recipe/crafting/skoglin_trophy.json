@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "nether_trophy",
+  "ingredients": [
+    "mynethersdelight:skoglin_trophy",
+    "mynethersdelight:hoglin_hide"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:hoglin_trophy"
+  }
+}

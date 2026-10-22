@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "nether_stove",
+  "key": {
+    "B": "minecraft:polished_blackstone_bricks",
+    "C": "minecraft:campfire",
+    "i": "#c:bricks/nether"
+  },
+  "pattern": [
+    "iii",
+    "B B",
+    "BCB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:nether_bricks_stove"
+  }
+}

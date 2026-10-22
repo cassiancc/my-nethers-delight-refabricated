@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:ghasmati",
+    "#c:drinks/milk",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "mynethersdelight:dried_ghast_with_milk"
+  }
+}

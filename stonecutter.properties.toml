@@ -1,0 +1,77 @@
+[mod]
+id = "mynethersdelight"
+name = "My Nether's Delight Refabricated"
+group = "com.soytutta"
+version = "3.0.0-1.10.4.1"
+channel_tag = "-alpha.1"
+description = "A nether expansion for the Farmer's Delight mod!"
+authors = ["rotgruengelb", "SoyTutta"]
+contributors = ["Mpustovoi", "Unroman", "ChuijkYahus", "SlimeSB", "RaymondBlaze", "TCGhost", "Sarinsa", "Umpaz", "SoyTutta", "rotgruengelb", "MerchantCalico"]
+inception_year = "2026"
+license.name = "ARR"
+license.url = ""
+license.dist = "repo"
+sources_url = "https://github.com/rotgruengelb/my-nethers-delight-refabricated"
+homepage_url = "https://github.com/rotgruengelb/my-nethers-delight-refabricated"
+issues_url = "https://github.com/rotgruengelb/my-nethers-delight-refabricated/issues"
+discord_url = "https://discord.gg/zEUqJYBang"
+environment = "client_and_server"
+dev_jvm_args = [
+	"-XX:+IgnoreUnrecognizedVMOptions",
+	"-XX:+UseZGC",
+	"-XX:+HeapDumpOnOutOfMemoryError",
+	"-XX:HeapDumpPath=heapdump.hprof",
+	"-XX:+ShowCodeDetailsInExceptionMessages",
+	"-XX:+UseCompactObjectHeaders",
+	"-XX:+AlwaysPreTouch",
+	"-XX:+UseStringDeduplication",
+	"-Dfile.encoding=UTF-8"
+]
+dev_jvm_args_mixin_debug = [
+	"-Dmixin.env.remapRefMap=true",
+	"-Dmixin.debug.verbose=true",
+	"-Dmixin.debug.verify=true",
+	"-Dmixin.debug.countInjections=true",
+	"-Dmixin.debug=true",
+	"-Dmixin.debug.export=true"
+]
+
+[[mod.pom.developers]]
+id = "rotgruengelb"
+name = "rotgruengelb"
+url = "https://github.com/rotgruengelb"
+[[mod.pom.developers]]
+id = "soytutta"
+name = "SoyTutta"
+url = "https://github.com/SoyTutta"
+
+[fabric]
+deps.fabric-loader = "0.19.5"
+
+[fabric."1.21.1"]
+deps.minecraft = "1.21.1"
+deps.fabric-api = "0.116.7+1.21.1"
+deps.modmenu = "11.0.4"
+deps.farmers-delight = "1.21.1-3.3.3"
+deps.jei = "19.56.0.441"
+
+[fabric."1.21.11"]
+deps.minecraft = "1.21.11"
+deps.fabric-api = "0.141.6+1.21.11"
+deps.modmenu = "17.0.1-beta.1"
+deps.farmers-delight = "1.21.11-3.4.9"
+deps.jei = "27.53.0.109"
+
+[fabric."26.1.2"]
+deps.minecraft = "26.1.2"
+deps.fabric-api = "0.152.1+26.1.2"
+deps.modmenu = "18.0.0-alpha.8"
+deps.farmers-delight = "26.1-3.6.6"
+deps.jei = "29.47.0.111"
+
+[fabric."26.2"]
+deps.minecraft = "26.2"
+deps.fabric-api = "0.161.0+26.2"
+deps.modmenu = "20.0.2"
+deps.farmers-delight = "26.2-3.6.7"
+deps.jei = "30.47.0.239"

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:roasted_sausage",
+    "#c:foods/bread"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:hotdog"
+  }
+}

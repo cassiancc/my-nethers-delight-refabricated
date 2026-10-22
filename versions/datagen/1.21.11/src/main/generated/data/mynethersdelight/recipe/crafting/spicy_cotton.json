@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "mynethersdelight:ghasta",
+    "#mynethersdelight:hot_spice",
+    "minecraft:blaze_rod",
+    "mynethersdelight:ghasta"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mynethersdelight:spicy_cotton"
+  }
+}
